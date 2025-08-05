@@ -24,18 +24,20 @@ const TaskTable = ({ tasks }) => {
   const TableHeader = () => (
     <thead className="border-b border-gray-300">
       <tr className="text-black text-left">
-        <th className="py-2">Task Title</th>
-        <th className="py-2">Priority</th>
-        <th className="py-2">Team</th>
-        <th className="py-2 hidden md:block">Created At</th>
+        <th className="py-2 px-4">Task Title</th>
+        <th className="py-2 px-4">Priority</th>
+        <th className="py-2 px-4">Team</th>
+        <th className="py-2 px-4 hidden md:block whitespace-nowrap">
+          Created At
+        </th>
       </tr>
     </thead>
   );
 
   const TableRow = ({ task }) => (
     <tr className="border-b border-gray-300 text-gray-600 hover:bg-gray-300/10">
-      <td className="py-2">
-        <div className="flex items-center gap-2">
+      <td className="py-2 px-4">
+        <div className="flex items-center gap-3">
           <div
             className={clsx("w-4 h-4 rounded-full", TASK_TYPE[task.stage])}
           />
@@ -44,7 +46,7 @@ const TaskTable = ({ tasks }) => {
         </div>
       </td>
 
-      <td className="py-2">
+      <td className="py-2 px-4">
         <div className="flex gap-1 items-center">
           <span className={clsx("text-lg", PRIORITYSTYLES[task.priority])}>
             {ICONS[task.priority]}
@@ -52,26 +54,33 @@ const TaskTable = ({ tasks }) => {
           <span className="capitalize">{task.priority}</span>
         </div>
       </td>
-      <td className="py-2">
+
+      <td className="py-2 px-4">
         <div className="flex">
           {task.team.map((m, index) => (
             <div
               key={index}
               className={clsx(
-                "w-7 h-7 rounded-full text-white flex items-center justify-center text-sm -mr-1 font-semibold",
+                "w-8 h-8 rounded-full text-white flex items-center justify-center text-sm -mr-1",
                 BGS[index % BGS.length]
               )}
             >
-              {getInitials(m?.name)}
+              <UserInfo user={m} />
+              {/* {getInitials(m?.name)} */}
             </div>
           ))}
         </div>
+      </td>
+      <td className="py-2 px-4 hidden md:block whitespace-nowrap">
+        <span className="text-base text-gray-600">
+          {moment(task?.date).fromNow()}
+        </span>
       </td>
     </tr>
   );
   return (
     <>
-      <div className="w-full md:w-2/3 bg-white px-2 md:px-4 pt-4 pb-4 shadow-lg rounded">
+      <div className="w-full bg-white px-4 md:px-6 pt-4 pb-6 shadow-lg rounded">
         <table className="w-full">
           <TableHeader />
           <tbody>
@@ -82,6 +91,66 @@ const TaskTable = ({ tasks }) => {
         </table>
       </div>
     </>
+  );
+};
+
+const UserTable = ({ users }) => {
+  const TableHeader = () => (
+    <thead className="border-b border-gray-200">
+      <tr className="text-gray-700 text-left text-sm">
+        <th className="py-2 px-3 whitespace-nowrap">Full Name</th>
+        <th className="py-2 px-3">Status</th>
+        <th className="py-2 px-3 whitespace-nowrap">Created At</th>
+      </tr>
+    </thead>
+  );
+
+  const TableRow = ({ user }) => (
+    <tr className="border-b border-gray-100 hover:bg-gray-50 transition-all text-sm">
+      <td className="py-5 px-3">
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-full bg-violet-700 text-white flex items-center justify-center text-xs font-semibold">
+            {getInitials(user?.name)}
+          </div>
+          <div className="leading-tight">
+            <p className="font-medium text-gray-900 text-sm whitespace-nowrap">
+              {user.name}
+            </p>
+            <p className="text-[11px] text-gray-500">{user?.role}</p>
+          </div>
+        </div>
+      </td>
+
+      <td className="py-5 px-3 whitespace-nowrap">
+        <span
+          className={clsx(
+            "inline-block px-2 py-[2px] rounded-full text-xs font-medium",
+            user?.isActive
+              ? "bg-green-200 text-green-800"
+              : "bg-yellow-100 text-yellow-800"
+          )}
+        >
+          {user?.isActive ? "Active" : "Disabled"}
+        </span>
+      </td>
+
+      <td className="py-5 px-3 text-xs text-gray-500 whitespace-nowrap">
+        {moment(user?.createdAt).fromNow()}
+      </td>
+    </tr>
+  );
+
+  return (
+    <div className="w-full overflow-x-auto bg-white px-4 py-4 shadow-lg rounded-lg">
+      <table className="min-w-full text-left">
+        <TableHeader />
+        <tbody>
+          {users?.map((user, index) => (
+            <TableRow key={index + user?._id} user={user} />
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 };
 
@@ -155,13 +224,16 @@ const Dashboard = () => {
         </h4>
         <Chart />
       </div>
-      <div className="w-full flex flex-col md:flex-row gap-4 2xl:gap-10 py-8">
+      <div className="w-full flex flex-col lg:flex-row gap-4 2xl:gap-10 py-8">
         {/* {Left} */}
-        <div className="">
+        <div className="flex-1">
           <TaskTable tasks={summary.last10Task} />
         </div>
 
         {/* {Right} */}
+        <div className="w-full lg:w-1/3 font-semibold">
+          <UserTable users={summary.users} />
+        </div>
       </div>
     </div>
   );
