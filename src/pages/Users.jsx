@@ -5,8 +5,8 @@ import { IoMdAdd } from "react-icons/io";
 import { summary } from "../assets/data";
 import { getInitials } from "../utils";
 import clsx from "clsx";
-// import ConfirmationDialog, { UserAction } from "../components/Dialogs";
-// import AddUser from "../components/AddUser";
+import ConfirmationDialog, { UserAction } from "../components/Dialogs";
+import AddUser from "../components/AddUser";
 
 const Users = () => {
   const [openDialog, setOpenDialog] = useState(false);
@@ -114,13 +114,13 @@ const Users = () => {
         </div>
       </div>
      
-      {/* <AddUser
+      <AddUser
         open={open}
         setOpen={setOpen}
         userData={selected}
         key={new Date().getTime().toString()}
       />
-      <ConfirmatioDialog
+      <ConfirmationDialog
         open={openDialog}
         setOpen={setOpenDialog}
         onClick={deleteHandler}
@@ -129,7 +129,7 @@ const Users = () => {
         open={openAction}
         setOpen={setOpenAction}
         onClick={userActionHandler}
-      /> */}
+      />
     </>
   );
 };

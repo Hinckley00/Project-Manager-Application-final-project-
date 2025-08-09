@@ -11,6 +11,7 @@ import TaskTitle from "../components/TaskTitle.jsx";
 import BoardView from "../components/BoardView.jsx";
 import { tasks } from "../assets/data.js";
 import Table from "../components/task/Table.jsx";
+import AddTask from "../components/task/AddTask.jsx";
 
 const TABS = [
   { title: "Board View", icon: <MdGridView /> },
@@ -51,26 +52,28 @@ const Tasks = () => {
         )}
       </div>
 
-        <Tabs tabs={TABS} setSelected={setSelected}>
-          {!status && (
-            <div className="w-full flex justify-between gap-4 md:gap-x-12 py-4">
-              <TaskTitle label="To Do" className={TASK_TYPE.todo} />
-              <TaskTitle
-                label="In Progress"
-                className={TASK_TYPE["in progress"]}
-              />
-              <TaskTitle label="Completed" className={TASK_TYPE.completed} />
-            </div>
-          )}
+      <Tabs tabs={TABS} setSelected={setSelected}>
+        {!status && (
+          <div className="w-full flex justify-between gap-4 md:gap-x-12 py-4">
+            <TaskTitle label="To Do" className={TASK_TYPE.todo} />
+            <TaskTitle
+              label="In Progress"
+              className={TASK_TYPE["in progress"]}
+            />
+            <TaskTitle label="Completed" className={TASK_TYPE.completed} />
+          </div>
+        )}
 
-          {selected !== 1 ? (
-            <BoardView tasks={tasks} />
-          ) : (
-            <div className="w-full">
-              <Table tasks={tasks} />
-            </div>
-          )}
-        </Tabs>
+        {selected !== 1 ? (
+          <BoardView tasks={tasks} />
+        ) : (
+          <div className="w-full">
+            <Table tasks={tasks} />
+          </div>
+        )}
+      </Tabs>
+
+      <AddTask open={open} setOpen={setOpen} />
     </div>
   );
 };
